@@ -13,29 +13,59 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
 
     return (
         <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
-            <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
-                <div className="absolute inset-0 bg-zinc-900" />
-                <Link href={route('home')} className="relative z-20 flex items-center text-lg font-medium">
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
-                    {name}
-                </Link>
-                {quote && (
-                    <div className="relative z-20 mt-auto">
-                        <blockquote className="space-y-2">
-                            <p className="text-lg">&ldquo;{quote.message}&rdquo;</p>
-                            <footer className="text-sm text-neutral-300">{quote.author}</footer>
-                        </blockquote>
+            <div className="relative hidden h-full flex-col bg-muted p-10 text-sidebar-foreground dark:border-r dark:border-sidebar-border lg:flex overflow-hidden">
+                {/* Background image */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: 'url(/split-layout-img.jpg)' }}
+                />
+
+                {/* Gradient overlay using theme colors */}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: 'linear-gradient(90deg, hsl(15 95% 35% / 0.95) 0%, hsl(15 95% 35% / 0.4) 65%, hsl(15 95% 35% / 0) 100%)'
+                    }}
+                />
+
+                {/* Content */}
+                <div className="relative z-20 flex h-full flex-col">
+                    {/* Logo and App Name */}
+                    <Link
+                        href={route('home')}
+                        className="flex items-center gap-3 text-xl font-semibold text-white"
+                    >
+                        <AppLogoIcon className="size-10 fill-current" />
+                        <span>{name}</span>
+                    </Link>
+
+                    {/* Main Content Area */}
+                    <div className="mt-auto max-w-[420px] space-y-8">
+                        <h1 className="text-3xl font-bold tracking-tight text-white">
+                            Welcome to the games!
+                        </h1>
+
+                        {quote && (
+                            <blockquote className="space-y-3 opacity-85">
+                                <p className="text-xl font-medium text-white italic">
+                                    &ldquo;{quote.message}&rdquo;
+                                </p>
+                                <footer className="text-sm text-white/70">
+                                    — {quote.author}
+                                </footer>
+                            </blockquote>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
-            <div className="w-full lg:p-8">
+            <div className="w-full bg-background lg:p-8">
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <Link href={route('home')} className="relative z-20 flex items-center justify-center lg:hidden">
-                        <AppLogoIcon className="h-10 fill-current text-black sm:h-12" />
+                        <AppLogoIcon className="h-10 fill-current text-foreground sm:h-12" />
                     </Link>
                     <div className="flex flex-col items-start gap-2 text-left sm:items-center sm:text-center">
-                        <h1 className="text-xl font-medium">{title}</h1>
-                        <p className="text-muted-foreground text-sm text-balance">{description}</p>
+                        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+                        <p className="text-sm text-muted-foreground text-balance">{description}</p>
                     </div>
                     {children}
                 </div>

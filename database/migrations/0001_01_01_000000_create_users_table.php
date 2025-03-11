@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('zip');
+            $table->string('country');
             $table->timestamps();
         });
 
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('roles', ['player', 'umpire', 'admin'])->default('player');
+            $table->boolean('verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

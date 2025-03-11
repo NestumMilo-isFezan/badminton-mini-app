@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image')->nullable();
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();
         });
@@ -32,6 +33,8 @@ return new class extends Migration
             $table->enum('type', ['single', 'double']);
             $table->foreignId('venue_id')->constrained('venues');
             $table->foreignId('court_id')->constrained('courts');
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
             $table->timestamps();
         });
 

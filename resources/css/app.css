@@ -127,15 +127,15 @@
   --accent-11: hsl(15 95% 45%);
   --accent-12: hsl(15 100% 30%);
 
-  /* Sidebar colors */
-  --sidebar: hsl(20 33% 98%);
-  --sidebar-foreground: hsl(20 10% 15%);
-  --sidebar-primary: hsl(15 95% 55%);
+  /* Sidebar colors - updated with white text */
+  --sidebar: var(--primary);
+  --sidebar-foreground: hsl(0 0% 100%);
+  --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(20 25% 97%);
-  --sidebar-accent-foreground: hsl(15 70% 45%);
-  --sidebar-border: hsl(20 20% 85%);
-  --sidebar-ring: hsl(15 70% 70%);
+  --sidebar-accent: color-mix(in srgb, var(--primary) 90%, white 10%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: color-mix(in srgb, white 20%, transparent);
+  --sidebar-ring: color-mix(in srgb, white 30%, transparent);
 }
 
 .dark {
@@ -187,15 +187,15 @@
   --accent-11: hsl(15 95% 75%);
   --accent-12: hsl(15 100% 85%);
 
-  /* Sidebar colors */
-  --sidebar: hsl(15 15% 12%);
-  --sidebar-foreground: hsl(20 20% 98%);
-  --sidebar-primary: hsl(15 90% 60%);
+  /* Sidebar colors for dark mode - maintaining white text */
+  --sidebar: var(--primary);
+  --sidebar-foreground: hsl(0 0% 100%);
+  --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(15 15% 12%);
-  --sidebar-accent-foreground: hsl(20 20% 98%);
-  --sidebar-border: hsl(15 25% 25%);
-  --sidebar-ring: hsl(15 70% 40%);
+  --sidebar-accent: color-mix(in srgb, var(--primary) 90%, white 10%);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: color-mix(in srgb, white 20%, transparent);
+  --sidebar-ring: color-mix(in srgb, white 30%, transparent);
 }
 
 @layer base {
