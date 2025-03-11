@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -17,6 +16,27 @@ class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    /**
+     * Collection of Lee Chong Wei quotes
+     *
+     * @return array
+     */
+    protected function getLeeChongWeiQuotes(): array
+    {
+        return [
+            "When you lose, you get up, you make it better, you try again." => "Lee Chong Wei",
+            "Defeat is not the worst of failures. Not to have tried is the true failure." => "Lee Chong Wei",
+            "The more you practice, the more confidence you get." => "Lee Chong Wei",
+            "I just try my best in every match. Win or lose, I just accept the result." => "Lee Chong Wei",
+            "Success is not final, failure is not fatal: it is the courage to continue that counts." => "Lee Chong Wei",
+            "Every time I lose, I learn from my mistakes and I come back stronger." => "Lee Chong Wei",
+            "In badminton, you need power, speed, endurance, and mental strength." => "Lee Chong Wei",
+            "The key to success is not giving up, even when nobody else believes in you." => "Lee Chong Wei",
+            "Hard work beats talent when talent doesn't work hard." => "Lee Chong Wei",
+            "Champions keep playing until they get it right." => "Lee Chong Wei",
+        ];
+    }
 
     /**
      * Determines the current asset version.
@@ -37,12 +57,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+        $quotes = $this->getLeeChongWeiQuotes();
+        $message = array_rand($quotes);
+        $author = $quotes[$message];
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
+            'quote' => [
+                'message' => $message,
+                'author' => $author
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],

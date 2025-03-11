@@ -1,53 +1,124 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { SidebarMenuButton } from '@/components/ui/sidebar';
 import { useAppearance } from '@/hooks/use-appearance';
 import { Monitor, Moon, Sun } from 'lucide-react';
-import { HTMLAttributes } from 'react';
 
-export default function AppearanceToggleDropdown({ className = '', ...props }: HTMLAttributes<HTMLDivElement>) {
+interface AppearanceToggleDropdownProps {
+    showText?: boolean;
+}
+
+export default function AppearanceToggleDropdown({ showText = false }: AppearanceToggleDropdownProps) {
     const { appearance, updateAppearance } = useAppearance();
 
     const getCurrentIcon = () => {
         switch (appearance) {
-            case 'dark':
-                return <Moon className="h-5 w-5" />;
             case 'light':
-                return <Sun className="h-5 w-5" />;
+                return <Sun className="h-5 w-5 text-current" />;
+            case 'dark':
+                return <Moon className="h-5 w-5 text-current" />;
             default:
-                return <Monitor className="h-5 w-5" />;
+                return <Monitor className="h-5 w-5 text-current" />;
         }
     };
 
-    return (
-        <div className={className} {...props}>
+    const getCurrentText = () => {
+        switch (appearance) {
+            case 'light':
+                return 'Light Mode';
+            case 'dark':
+                return 'Dark Mode';
+            default:
+                return 'System Theme';
+        }
+    };
+
+    if (showText) {
+        return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
+                    <SidebarMenuButton className="text-sidebar-foreground/70 hover:bg-sidebar-foreground/10 group-data-[collapsible=icon]:hidden">
                         {getCurrentIcon()}
-                        <span className="sr-only">Toggle theme</span>
-                    </Button>
+                        <span>{getCurrentText()}</span>
+                    </SidebarMenuButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => updateAppearance('light')}>
+                <DropdownMenuContent
+                    className="bg-primary text-primary-foreground border-primary-foreground/20"
+                    align="end"
+                >
+                    <DropdownMenuItem
+                        onClick={() => updateAppearance('light')}
+                        className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                    >
                         <span className="flex items-center gap-2">
-                            <Sun className="h-5 w-5" />
-                            Light
+                            <Sun className="h-5 w-5 text-current" />
+                            Light Mode
                         </span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => updateAppearance('dark')}>
+                    <DropdownMenuItem
+                        onClick={() => updateAppearance('dark')}
+                        className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                    >
                         <span className="flex items-center gap-2">
-                            <Moon className="h-5 w-5" />
-                            Dark
+                            <Moon className="h-5 w-5 text-current" />
+                            Dark Mode
                         </span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => updateAppearance('system')}>
+                    <DropdownMenuItem
+                        onClick={() => updateAppearance('system')}
+                        className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                    >
                         <span className="flex items-center gap-2">
-                            <Monitor className="h-5 w-5" />
-                            System
+                            <Monitor className="h-5 w-5 text-current" />
+                            System Theme
                         </span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-        </div>
+        );
+    }
+
+    // Original icon-only version
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
+                    {getCurrentIcon()}
+                    <span className="sr-only">Toggle theme</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+                className="bg-primary text-primary-foreground border-primary-foreground/20"
+                align="end"
+            >
+                <DropdownMenuItem
+                    onClick={() => updateAppearance('light')}
+                    className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                >
+                    <span className="flex items-center gap-2">
+                        <Sun className="h-5 w-5 text-current" />
+                        Light Mode
+                    </span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => updateAppearance('dark')}
+                    className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                >
+                    <span className="flex items-center gap-2">
+                        <Moon className="h-5 w-5 text-current" />
+                        Dark Mode
+                    </span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => updateAppearance('system')}
+                    className="focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                >
+                    <span className="flex items-center gap-2">
+                        <Monitor className="h-5 w-5 text-current" />
+                        System Theme
+                    </span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

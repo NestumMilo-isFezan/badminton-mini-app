@@ -2,6 +2,7 @@ import { Icon } from '@/components/icon';
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { type ComponentPropsWithoutRef } from 'react';
+import AppearanceToggleDropdown from '@/components/appearance-dropdown';
 
 export function NavFooter({
     items,
@@ -16,15 +17,19 @@ export function NavFooter({
                 <SidebarMenu>
                     {items.map((item) => (
                         <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton
-                                asChild
-                                className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
-                            >
-                                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                    <span>{item.title}</span>
-                                </a>
-                            </SidebarMenuButton>
+                            {item.component === 'appearance-toggle' ? (
+                                <AppearanceToggleDropdown showText={true} />
+                            ) : (
+                                <SidebarMenuButton
+                                    asChild
+                                    className="text-sidebar-foreground/70 hover:bg-sidebar-foreground/10 group-data-[collapsible=icon]:hidden"
+                                >
+                                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                                        {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
+                                        <span>{item.title}</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            )}
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>

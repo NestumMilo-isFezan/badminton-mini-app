@@ -15,7 +15,8 @@ class Address extends Model
         'address_2',
         'city',
         'state',
-        'zip'
+        'zip',
+        'country'
     ];
 
     public function profile(): HasOne
