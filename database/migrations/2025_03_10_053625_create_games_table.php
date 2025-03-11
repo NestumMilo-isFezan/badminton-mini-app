@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('image')->nullable();
+            $table->string('contact')->nullable();
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();
         });
@@ -33,13 +34,18 @@ return new class extends Migration
             $table->enum('type', ['single', 'double']);
             $table->foreignId('venue_id')->constrained('venues');
             $table->foreignId('court_id')->constrained('courts');
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->datetime('start_time')->nullable();
+            $table->datetime('end_time')->nullable();
+            $table->foreignId('player_1_id')->constrained('players');
+            $table->foreignId('player_2_id')->constrained('players');
+            $table->foreignId('umpire_id')->constrained('umpires')->nullable();
+            $table->foreignId('winner_id')->constrained('players')->nullable();
             $table->timestamps();
         });
 
         Schema::create('game_scores', function (Blueprint $table) {
             $table->id();
+            $table->integer('set');
             $table->foreignId('game_id')->constrained('games');
             $table->foreignId('player_id')->constrained('players');
             $table->integer('score');

@@ -48,6 +48,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->boolean('verified')->default(false);
+            $table->integer('wins')->default(0);
+            $table->integer('losses')->default(0);
+            $table->integer('matches')->default(0);
+            $table->decimal('win_rate')->default(0);
             $table->timestamps();
         });
 
