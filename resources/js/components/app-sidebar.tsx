@@ -21,6 +21,12 @@ const mainNavItems: NavItem[] = [
         routeName: 'admin.venues.index',
         icon: MapPin,
     },
+    {
+        title: 'Tournaments',
+        url: '/games',
+        routeName: 'admin.games.index',
+        icon: Gamepad2,
+    }
 
 ];
 
