@@ -29,4 +29,9 @@ class Player extends Model
     {
         return $this->hasMany(GameScore::class);
     }
+
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
 }

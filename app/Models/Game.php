@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Game extends Model
 {
@@ -27,8 +28,20 @@ class Game extends Model
 
     protected $casts = [
         'status' => 'string',
-        'type' => 'string'
+        'type' => 'string',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
+
+    protected function getStartTimeAttribute($value)
+    {
+        return Carbon::parse($value)->setTimezone('Asia/Kuala_Lumpur');
+    }
+
+    protected function getEndTimeAttribute($value)
+    {
+        return Carbon::parse($value)->setTimezone('Asia/Kuala_Lumpur');
+    }
 
     public function venue(): BelongsTo
     {

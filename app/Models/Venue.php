@@ -17,18 +17,13 @@ class Venue extends Model
         'address_id'
     ];
 
-    public function address(): BelongsTo
+    public function address()
     {
         return $this->belongsTo(Address::class);
     }
 
-    public function courts(): HasMany
+    public function courts()
     {
         return $this->hasMany(Court::class);
-    }
-
-    public function games(): HasMany
-    {
-        return $this->hasMany(Game::class);
     }
 }

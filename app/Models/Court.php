@@ -16,12 +16,12 @@ class Court extends Model
         'venue_id'
     ];
 
-    public function venue(): BelongsTo
+    public function venue()
     {
         return $this->belongsTo(Venue::class);
     }
 
-    public function games(): HasMany
+    public function games()
     {
         return $this->hasMany(Game::class);
     }
