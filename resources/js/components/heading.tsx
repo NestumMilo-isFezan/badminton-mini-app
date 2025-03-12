@@ -4,5 +4,12 @@ export default function Heading({ title, description }: { title: string; descrip
             <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
             {description && <p className="text-muted-foreground text-sm">{description}</p>}
         </div>
+
+        //Add something here
+        <div>
+            <h2 className="text-xl font-semibold tracking-tight">
+                {title}
+            </h2>
+        </div>
     );
 }
