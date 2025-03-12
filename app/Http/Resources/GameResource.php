@@ -39,8 +39,8 @@ class GameResource extends JsonResource
             ],
             'player_1' => [
                 'id' => $player_1->id,
-                'name' => $player_1->name,
-                'avatar' => $player_1->avatar ?? null,
+                'name' => $player_1->user->first_name . ' ' . $player_1->user->last_name,
+                'avatar' => $player_1->user?->profile?->avatar ?? null,
                 'win_rate' => $player_1->win_rate,
                 'matches' => $player_1->matches,
                 'wins' => $player_1->wins,
@@ -48,8 +48,8 @@ class GameResource extends JsonResource
             ],
             'player_2' => [
                 'id' => $player_2->id,
-                'name' => $player_2->name,
-                'avatar' => $player_2->avatar ?? null,
+                'name' => $player_2->user->first_name . ' ' . $player_2->user->last_name,
+                'avatar' => $player_2->user?->profile?->avatar ?? null,
                 'win_rate' => $player_2->win_rate,
                 'matches' => $player_2->matches,
                 'wins' => $player_2->wins,
