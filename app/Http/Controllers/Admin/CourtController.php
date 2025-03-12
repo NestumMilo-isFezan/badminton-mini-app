@@ -7,5 +7,8 @@ use Illuminate\Http\Request;
 
 class CourtController extends Controller
 {
-    //
+    public function store(Request $request)
+    {
+        //
+    }
 }
