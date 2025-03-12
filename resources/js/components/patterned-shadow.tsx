@@ -8,7 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 const patternedShadowVariants = cva("", {
   variants: {
     size: {
-      small: "pt-6 pb-8",
+      small: "pt-2 pb-4", // Reduced from pt-6 pb-8
       medium: "pt-12 pb-16",
     }
   },

@@ -8,6 +8,9 @@ import { format } from 'date-fns';
 import { Badge } from "@/components/ui/badge";
 import { useModal } from '@/hooks/use-modal';
 import { GameModalContent } from './game-modal';
+import { Button } from "@/components/ui/button";
+import { EditGameModal } from '@/pages/admin/game/modal/edit';
+import { DeleteGameModal } from '@/pages/admin/game/modal/delete';
 
 interface Game {
     id: number;
@@ -120,7 +123,7 @@ export function GameCard({ game }: GameCardProps) {
         <div className="px-2">
             <PatternedShadow size="small">
                 <Card
-                    className="overflow-hidden transition-all duration-300 border-primary/20 hover:border-primary bg-background cursor-pointer"
+                    className="overflow-hidden transition-all duration-300 border-primary/20 hover:border-primary bg-background cursor-pointer py-0"
                     onClick={handleClick}
                 >
                     <div className="p-4 flex items-center gap-4">
@@ -175,6 +178,10 @@ export function GameCard({ game }: GameCardProps) {
                             )}
                         </div>
                     </div>
+                    <CardFooter className="flex justify-end gap-2 border-t p-4">
+                        <EditGameModal game={game} />
+                        <DeleteGameModal gameId={game.id} gameName={game.name} />
+                    </CardFooter>
                 </Card>
             </PatternedShadow>
         </div>

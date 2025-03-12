@@ -26,6 +26,64 @@ export interface NavItem {
     component?: string;
 }
 
+export interface Game {
+    id: number;
+    name: string;
+    status: string;
+    type: string;
+    venue: {
+        id: number;
+        name: string;
+        image: string | null;
+        address: {
+            address: string;
+            city: string;
+            state: string;
+            zip: string;
+            country: string;
+        }
+    };
+    court: {
+        id: number;
+        name: string;
+    };
+    player_1: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        win_rate: number;
+        matches: number;
+        wins: number;
+        losses: number;
+    };
+    player_2: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        win_rate: number;
+        matches: number;
+        wins: number;
+        losses: number;
+    };
+    start_time: string;
+    end_time: string;
+    scores: Array<{
+        set: number;
+        player_1_score: number;
+        player_2_score: number;
+    }>;
+    winner: {
+        id: number | null;
+        name: string | null;
+        avatar: string | null;
+    };
+    umpire: {
+        id: number | null;
+        name: string | null;
+        avatar: string | null;
+    };
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };

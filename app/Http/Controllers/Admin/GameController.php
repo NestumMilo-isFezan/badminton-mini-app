@@ -3,13 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\GameFilterService;
 use App\Models\Game;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Http\Resources\GameResource;
 
 class GameController extends Controller
 {
+    protected $gameService;
+    protected $filterService;
+
+    public function __construct(GameFilterService $filterService)
+    {
+        $this->filterService = $filterService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,7 +34,10 @@ class GameController extends Controller
 
         $games = $games->paginate(10);
 
-        return Inertia::render('admin/game/index');
+
+        return Inertia::render('admin/game/index', [
+            'games' => GameResource::collection($games)
+        ]);
     }
 
     /**
@@ -31,7 +45,11 @@ class GameController extends Controller
      */
     public function create()
     {
-        //
+        return $this->filterService->getAvailableResources(
+            Carbon::parse(request('start_time')),
+            Carbon::parse(request('end_time')),
+            request('venue')
+        );
     }
 
     /**
@@ -52,6 +70,8 @@ class GameController extends Controller
         ]);
 
         DB::transaction(function () use ($game) {
+            $game['start_time'] = Carbon::parse($game['start_time'])->setTimezone('Asia/Kuala_Lumpur');
+            $game['end_time'] = Carbon::parse($game['end_time'])->setTimezone('Asia/Kuala_Lumpur');
             Game::create($game);
         });
 
@@ -78,7 +98,23 @@ class GameController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $game = $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'venue_id' => 'required|exists:venues,id',
+            'court_id' => 'required|exists:courts,id',
+            'player_1_id' => 'required|exists:players,id',
+            'player_2_id' => 'required|exists:players,id',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date',
+        ]);
+
+        DB::transaction(function () use ($game) {
+            $game['start_time'] = Carbon::parse($game['start_time'])->setTimezone('Asia/Kuala_Lumpur');
+            $game['end_time'] = Carbon::parse($game['end_time'])->setTimezone('Asia/Kuala_Lumpur');
+            Game::findOrFail($id)->update($game);
+        });
     }
 
     /**
@@ -86,6 +122,13 @@ class GameController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $game = Game::findOrFail($id);
+
+        DB::transaction(function () use ($game) {
+            $game->delete();
+        });
+
+        return redirect()->route('admin.games.index')
+            ->with('success', 'Game deleted successfully.');
     }
 }
