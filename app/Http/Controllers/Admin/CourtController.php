@@ -9,6 +9,6 @@ class CourtController extends Controller
 {
     public function store(Request $request)
     {
-        //
+      //
     }
 }
