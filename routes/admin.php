@@ -9,5 +9,5 @@ Route::middleware(['auth', 'user_access:admin'])->prefix('admin')->name('admin.'
     })->name('dashboard');
 
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)->except(['create', 'edit']);
-    Route::resource('games', \App\Http\Controllers\Admin\GameController::class)->except(['create', 'edit']);
+    Route::resource('games', \App\Http\Controllers\Admin\GameController::class);
 });
