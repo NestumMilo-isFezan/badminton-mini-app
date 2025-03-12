@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class CourtController extends Controller
 {
-    public function index()
+    public function store(Request $request)
     {
-        return view('admin.court.index');
+      //
     }
 }
