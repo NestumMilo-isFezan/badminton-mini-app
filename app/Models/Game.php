@@ -16,7 +16,13 @@ class Game extends Model
         'status',
         'type',
         'venue_id',
-        'court_id'
+        'court_id',
+        'start_time',
+        'end_time',
+        'player_1_id',
+        'player_2_id',
+        'umpire_id',
+        'winner_id'
     ];
 
     protected $casts = [
@@ -37,5 +43,15 @@ class Game extends Model
     public function scores(): HasMany
     {
         return $this->hasMany(GameScore::class);
+    }
+
+    public function player_1(): BelongsTo
+    {
+        return $this->belongsTo(Player::class, 'player_1_id');
+    }
+
+    public function player_2(): BelongsTo
+    {
+        return $this->belongsTo(Player::class, 'player_2_id');
     }
 }

@@ -13,7 +13,8 @@ class GameScore extends Model
     protected $fillable = [
         'game_id',
         'player_id',
-        'score'
+        'score',
+        'set',
     ];
 
     protected $casts = [
