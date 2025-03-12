@@ -38,8 +38,8 @@ return new class extends Migration
             $table->datetime('end_time')->nullable();
             $table->foreignId('player_1_id')->constrained('players');
             $table->foreignId('player_2_id')->constrained('players');
-            $table->foreignId('umpire_id')->constrained('umpires')->nullable();
-            $table->foreignId('winner_id')->constrained('players')->nullable();
+            $table->foreignId('umpire_id')->nullable()->constrained('umpires');
+            $table->foreignId('winner_id')->nullable()->constrained('players');
             $table->timestamps();
         });
 

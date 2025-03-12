@@ -40,6 +40,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->nullable();
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->foreignId('address_id')->constrained('addresses')->nullable();
             $table->timestamps();
         });
@@ -62,7 +63,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('admin', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
