@@ -9,6 +9,8 @@ import AppFullScreenModal from '@/components/app-full-screen-modal';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { GameFormSelect } from '@/components/game-form-select';
 import { Game } from '@/types';
+import { useDateTime } from '@/hooks/use-date-time';
+import { Edit } from "lucide-react";
 
 type AvailableResources = {
     players: Array<{ id: number; name: string }>;
@@ -22,11 +24,16 @@ interface EditGameModalContentProps {
 }
 
 function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
+    const { toLocalDate, toUTCString, TIMEZONE, formatLocalDate } = useDateTime();
     const [availableResources, setAvailableResources] = useState<AvailableResources>({
         players: [],
         venues: [],
         courts: [],
     });
+
+    // Extract hours and minutes from the game's start time
+    const startDate = toLocalDate(game.start_time);
+    const startTime = formatLocalDate(startDate, 'HH:mm');
 
     const { data, setData, post, processing, errors } = useForm({
         _method: 'PUT',
@@ -38,11 +45,14 @@ function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
         player_1_id: game.player_1.id.toString(),
         player_2_id: game.player_2.id.toString(),
         start_time: game.start_time,
-        end_time: game.end_time,
     });
 
     const handleSelectChange = (field: keyof typeof data) => (value: string) => {
         setData(field, value);
+    };
+
+    const handleDateTimeChange = (date: Date) => {
+        setData('start_time', toUTCString(date));
     };
 
     const fetchAvailableResources = async () => {
@@ -50,7 +60,6 @@ function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
             const response = await fetch(
                 route('admin.games.create', {
                     start_time: data.start_time || null,
-                    end_time: data.end_time || null,
                     venue: data.venue_id || null,
                 })
             );
@@ -63,11 +72,7 @@ function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
 
     useEffect(() => {
         fetchAvailableResources();
-    }, []);
-
-    useEffect(() => {
-        fetchAvailableResources();
-    }, [data.start_time, data.end_time]);
+    }, [data.start_time]);
 
     useEffect(() => {
         if (data.venue_id) {
@@ -88,7 +93,7 @@ function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
     return (
         <form id="edit-game-form" onSubmit={handleSubmit}>
             <AppFullScreenModal
-                title="Edit Game"
+                title="Edit Schedule"
                 onClose={onClose}
                 isSubmitting={processing}
                 submitLabel="Save Changes"
@@ -109,26 +114,15 @@ function EditGameModalContent({ game, onClose }: EditGameModalContentProps) {
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="start_time">Start Time</Label>
-                            <DateTimePicker
-                                value={data.start_time}
-                                onChange={(value) => setData('start_time', value)}
-                                disabled={processing}
-                            />
-                            <InputError message={errors.start_time} />
-                        </div>
-
-                        <div className="grid gap-2">
-                            <Label htmlFor="end_time">End Time</Label>
-                            <DateTimePicker
-                                value={data.end_time}
-                                onChange={(value) => setData('end_time', value)}
-                                disabled={processing}
-                            />
-                            <InputError message={errors.end_time} />
-                        </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="start_time">Start Time (Malaysia Time)</Label>
+                        <DateTimePicker
+                            date={toLocalDate(data.start_time)}
+                            onDateChange={handleDateTimeChange}
+                            showEndTime={false}
+                            startTime={startTime}
+                        />
+                        <InputError message={errors.start_time} />
                     </div>
 
                     <GameFormSelect
@@ -198,7 +192,8 @@ export function EditGameModal({ game }: EditGameModalProps) {
 
     return (
         <Button variant="outline" onClick={handleClick} size="sm">
-            Edit
+            <span><Edit /></span>
+            <span className="hidden md:block">Edit Schedule</span>
         </Button>
     );
 }

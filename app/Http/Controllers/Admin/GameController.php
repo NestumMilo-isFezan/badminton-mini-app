@@ -46,9 +46,8 @@ class GameController extends Controller
     public function create()
     {
         return $this->filterService->getAvailableResources(
-            Carbon::parse(request('start_time')),
-            Carbon::parse(request('end_time')),
-            request('venue')
+            request('start_time'),
+            request('venue') ? (int)request('venue') : null
         );
     }
 
@@ -66,15 +65,12 @@ class GameController extends Controller
             'player_1_id' => 'required|exists:players,id',
             'player_2_id' => 'required|exists:players,id',
             'start_time' => 'required|date',
-            'end_time' => 'required|date',
         ]);
 
         DB::transaction(function () use ($game) {
             $game['start_time'] = Carbon::parse($game['start_time'])->setTimezone('Asia/Kuala_Lumpur');
-            $game['end_time'] = Carbon::parse($game['end_time'])->setTimezone('Asia/Kuala_Lumpur');
             Game::create($game);
         });
-
     }
 
     /**
@@ -107,12 +103,10 @@ class GameController extends Controller
             'player_1_id' => 'required|exists:players,id',
             'player_2_id' => 'required|exists:players,id',
             'start_time' => 'required|date',
-            'end_time' => 'required|date',
         ]);
 
-        DB::transaction(function () use ($game) {
+        DB::transaction(function () use ($game, $id) {
             $game['start_time'] = Carbon::parse($game['start_time'])->setTimezone('Asia/Kuala_Lumpur');
-            $game['end_time'] = Carbon::parse($game['end_time'])->setTimezone('Asia/Kuala_Lumpur');
             Game::findOrFail($id)->update($game);
         });
     }

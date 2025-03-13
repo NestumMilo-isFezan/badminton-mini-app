@@ -2,6 +2,7 @@ import { useModal } from '@/hooks/use-modal';
 import { Button } from '@/components/ui/button';
 import { DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { useForm } from '@inertiajs/react';
+import { Delete, Trash } from "lucide-react";
 
 interface DeleteGameModalContentProps {
     gameId: number;
@@ -21,9 +22,9 @@ function DeleteGameModalContent({ gameId, gameName, onClose }: DeleteGameModalCo
     return (
         <>
             <DialogHeader>
-                <DialogTitle>Delete Game</DialogTitle>
+                <DialogTitle>Cancel Schedule</DialogTitle>
                 <DialogDescription>
-                    Are you sure you want to delete <span className="font-semibold">{gameName}</span>? This action cannot be undone.
+                    Are you sure you want to cancel the schedule for <span className="font-semibold">{gameName}</span>? This action cannot be undone.
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -39,7 +40,7 @@ function DeleteGameModalContent({ gameId, gameName, onClose }: DeleteGameModalCo
                     onClick={handleDelete}
                     disabled={processing}
                 >
-                    Delete
+                    Cancel Schedule
                 </Button>
             </DialogFooter>
         </>
@@ -63,7 +64,8 @@ export function DeleteGameModal({ gameId, gameName }: DeleteGameModalProps) {
 
     return (
         <Button variant="destructive" onClick={handleClick} size="sm">
-            Delete
+            <span><Trash /></span>
+            <span className="hidden md:block">Cancel Schedule</span>
         </Button>
     );
 }
