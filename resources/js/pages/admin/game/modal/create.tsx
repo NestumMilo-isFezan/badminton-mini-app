@@ -143,8 +143,8 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
                         value={data.venue_id}
                         onChange={handleSelectChange('venue_id')}
                         error={errors.venue_id}
-                        placeholder="Select venue"
-                        disabled={processing}
+                        placeholder={availableResources.venues.length ? "Select venue" : "No venues available"}
+                        disabled={processing || !availableResources.venues.length}
                         required
                     />
 
@@ -154,8 +154,14 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
                         value={data.court_id}
                         onChange={handleSelectChange('court_id')}
                         error={errors.court_id}
-                        placeholder="Select court"
-                        disabled={processing || !data.venue_id}
+                        placeholder={
+                            !data.venue_id
+                                ? "Select a venue first"
+                                : availableResources.courts.length
+                                    ? "Select court"
+                                    : "No courts available"
+                        }
+                        disabled={processing || !data.venue_id || !availableResources.courts.length}
                         required
                     />
 
@@ -166,8 +172,8 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
                             value={data.player_1_id}
                             onChange={handleSelectChange('player_1_id')}
                             error={errors.player_1_id}
-                            placeholder="Select player 1"
-                            disabled={processing}
+                            placeholder={availableResources.players.length ? "Select player 1" : "No players available"}
+                            disabled={processing || !availableResources.players.length}
                             required
                         />
 
@@ -177,8 +183,8 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
                             value={data.player_2_id}
                             onChange={handleSelectChange('player_2_id')}
                             error={errors.player_2_id}
-                            placeholder="Select player 2"
-                            disabled={processing}
+                            placeholder={availableResources.players.length ? "Select player 2" : "No players available"}
+                            disabled={processing || !availableResources.players.length}
                             required
                         />
                     </div>

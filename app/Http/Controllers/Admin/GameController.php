@@ -45,7 +45,7 @@ class GameController extends Controller
      */
     public function create()
     {
-        return $this->filterService->getAvailableResources(
+        return $this->filterService->getAvailableResourcesForCreate(
             request('start_time'),
             request('venue') ? (int)request('venue') : null
         );
@@ -86,7 +86,11 @@ class GameController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return $this->filterService->getAvailableResourcesForEdit(
+            request('start_time'),
+            request('venue') ? (int)request('venue') : null,
+            (int)$id
+        );
     }
 
     /**
