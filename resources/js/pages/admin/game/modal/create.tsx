@@ -8,6 +8,7 @@ import { FormEventHandler, useEffect, useState } from 'react';
 import AppFullScreenModal from '@/components/app-full-screen-modal';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { GameFormSelect } from '@/components/game-form-select';
+import { useDateTime } from '@/hooks/use-date-time';
 
 type GameForm = {
     name: string;
@@ -18,7 +19,6 @@ type GameForm = {
     player_1_id: string;
     player_2_id: string;
     start_time: string;
-    end_time: string;
 };
 
 type AvailableResources = {
@@ -33,6 +33,8 @@ type SelectOption = {
 };
 
 function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
+    const { toLocalDate, toUTCString, TIMEZONE } = useDateTime();
+
     const [availableResources, setAvailableResources] = useState<AvailableResources>({
         players: [],
         venues: [],
@@ -48,11 +50,15 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
         player_1_id: '',
         player_2_id: '',
         start_time: '',
-        end_time: '',
     });
 
     const handleSelectChange = (field: keyof GameForm) => (value: string) => {
         setData(field, value);
+    };
+
+    const handleDateTimeChange = (date: Date) => {
+        setData('start_time', toUTCString(date));
+        console.log(data.start_time);
     };
 
     const fetchAvailableResources = async () => {
@@ -60,8 +66,7 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
             const response = await fetch(
                 route('admin.games.create', {
                     start_time: data.start_time || null,
-                    end_time: data.end_time || null,
-                    venue: data.venue_id || null,
+                    venue: data.venue_id || null,  // Keep this as 'venue' to match the backend
                 })
             );
             const resources = await response.json();
@@ -79,7 +84,7 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
     // Fetch when time changes
     useEffect(() => {
         fetchAvailableResources();
-    }, [data.start_time, data.end_time]);
+    }, [data.start_time]);
 
     // Fetch when venue changes
     useEffect(() => {
@@ -122,26 +127,14 @@ function CreateGameModalContent({ onClose }: { onClose?: () => void }) {
                         <InputError message={errors.name} />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="start_time">Start Time</Label>
-                            <DateTimePicker
-                                value={data.start_time}
-                                onChange={(value) => setData('start_time', value)}
-                                disabled={processing}
-                            />
-                            <InputError message={errors.start_time} />
-                        </div>
-
-                        <div className="grid gap-2">
-                            <Label htmlFor="end_time">End Time</Label>
-                            <DateTimePicker
-                                value={data.end_time}
-                                onChange={(value) => setData('end_time', value)}
-                                disabled={processing}
-                            />
-                            <InputError message={errors.end_time} />
-                        </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="start_time">Start Time (Malaysia Time)</Label>
+                        <DateTimePicker
+                            date={toLocalDate(data.start_time)}
+                            onDateChange={handleDateTimeChange}
+                            showEndTime={false}
+                        />
+                        <InputError message={errors.start_time} />
                     </div>
 
                     <GameFormSelect
