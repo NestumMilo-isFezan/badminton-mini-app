@@ -1,7 +1,7 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/admin-layout';
 import { type BreadcrumbItem, type PaginatedData, type Game } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { GameCard } from '@/components/card/game';
 import { Button } from '@/components/ui/button';
 import { CreateGameModal } from '@/pages/admin/game/modal/create';
@@ -19,7 +19,6 @@ interface Props {
 }
 
 export default function Index({ games }: Props) {
-    // Create a mock paginated data structure
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

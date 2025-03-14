@@ -55,6 +55,7 @@ export interface Game {
         matches: number;
         wins: number;
         losses: number;
+        is_winner: boolean;
     };
     player_2: {
         id: number;
@@ -64,19 +65,20 @@ export interface Game {
         matches: number;
         wins: number;
         losses: number;
+        is_winner: boolean;
     };
     start_time: string;
     end_time: string;
     scores: Array<{
+        id: number;
+        game_id: number;
         set: number;
         player_1_score: number;
         player_2_score: number;
+        start_at: string | null;
+        match_duration: string | null;
+        status: string;
     }>;
-    winner: {
-        id: number | null;
-        name: string | null;
-        avatar: string | null;
-    };
     umpire: {
         id: number | null;
         name: string | null;

@@ -11,64 +11,9 @@ import { GameModalContent } from './game-modal';
 import { Button } from "@/components/ui/button";
 import { EditGameModal } from '@/pages/admin/game/modal/edit';
 import { DeleteGameModal } from '@/pages/admin/game/modal/delete';
-
-interface Game {
-    id: number;
-    name: string;
-    status: string;
-    type: string;
-    venue: {
-        id: number;
-        name: string;
-        image: string | null;
-        address: {
-            address: string;
-            city: string;
-            state: string;
-            zip: string;
-            country: string;
-        }
-    };
-    court: {
-        id: number;
-        name: string;
-    };
-    player_1: {
-        id: number;
-        name: string;
-        avatar: string | null;
-        win_rate: number;
-        matches: number;
-        wins: number;
-        losses: number;
-    };
-    player_2: {
-        id: number;
-        name: string;
-        avatar: string | null;
-        win_rate: number;
-        matches: number;
-        wins: number;
-        losses: number;
-    };
-    start_time: string;
-    end_time: string;
-    scores: Array<{
-        set: number;
-        player_1_score: number;
-        player_2_score: number;
-    }>;
-    winner: {
-        id: number | null;
-        name: string | null;
-        avatar: string | null;
-    };
-    umpire: {
-        id: number | null;
-        name: string | null;
-        avatar: string | null;
-    };
-}
+import { ScoreModal } from '@/pages/admin/game/modal/score';
+import { useState } from "react";
+import { type Game } from '@/types';
 
 interface GameCardProps {
     game: Game;
@@ -97,7 +42,6 @@ export function GameCard({ game }: GameCardProps) {
         end_time,
         status,
         scores,
-        winner,
         umpire
     } = game;
 
@@ -113,7 +57,7 @@ export function GameCard({ game }: GameCardProps) {
     };
 
     const getPlayerCardStyle = (playerId: number) => {
-        if (winner?.id === playerId) {
+        if (player_1.is_winner || player_2.is_winner) {
             return 'border-2 border-yellow-400 dark:border-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/30';
         }
         return 'bg-card hover:bg-muted/50 border-border';
@@ -178,9 +122,12 @@ export function GameCard({ game }: GameCardProps) {
                             )}
                         </div>
                     </div>
-                    <CardFooter className="flex justify-end gap-2 border-t p-4">
-                        <EditGameModal game={game} />
-                        <DeleteGameModal gameId={game.id} gameName={game.name} />
+                    <CardFooter className="flex justify-between gap-2 border-t p-4">
+                        <ScoreModal game={game} />
+                        <div className="flex gap-2">
+                            <EditGameModal game={game} />
+                            <DeleteGameModal gameId={game.id} gameName={game.name} />
+                        </div>
                     </CardFooter>
                 </Card>
             </PatternedShadow>

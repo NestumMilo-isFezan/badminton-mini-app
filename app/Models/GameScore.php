@@ -12,13 +12,21 @@ class GameScore extends Model
 
     protected $fillable = [
         'game_id',
-        'player_id',
-        'score',
         'set',
+        'player_1_id',
+        'player_2_id',
+        'player_1_score',
+        'player_2_score',
+        'status',
+        'start_at',
+        'match_duration'
     ];
 
     protected $casts = [
-        'score' => 'integer'
+        'player_1_score' => 'integer',
+        'player_2_score' => 'integer',
+        'start_at' => 'datetime',
+        'match_duration' => 'integer'
     ];
 
     public function game(): BelongsTo
@@ -26,8 +34,13 @@ class GameScore extends Model
         return $this->belongsTo(Game::class);
     }
 
-    public function player(): BelongsTo
+    public function player1(): BelongsTo
     {
-        return $this->belongsTo(Player::class);
+        return $this->belongsTo(Player::class, 'player_1_id');
+    }
+
+    public function player2(): BelongsTo
+    {
+        return $this->belongsTo(Player::class, 'player_2_id');
     }
 }

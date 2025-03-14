@@ -30,7 +30,7 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('status', ['pending', 'in_progress', 'completed']);
+            $table->enum('status', ['pending', 'in_match', 'completed']);
             $table->enum('type', ['single', 'double']);
             $table->foreignId('venue_id')->constrained('venues');
             $table->foreignId('court_id')->constrained('courts');
@@ -47,8 +47,13 @@ return new class extends Migration
             $table->id();
             $table->integer('set');
             $table->foreignId('game_id')->constrained('games');
-            $table->foreignId('player_id')->constrained('players');
-            $table->integer('score');
+            $table->foreignId('player_1_id')->constrained('players');
+            $table->foreignId('player_2_id')->constrained('players');
+            $table->datetime('start_at')->nullable();
+            $table->integer('match_duration')->nullable();
+            $table->enum('status', ['not_started','started', 'completed'])->default('not_started');
+            $table->integer('player_1_score');
+            $table->integer('player_2_score');
             $table->timestamps();
         });
     }

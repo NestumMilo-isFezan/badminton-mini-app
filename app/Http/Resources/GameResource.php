@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class GameResource extends JsonResource
 {
@@ -45,6 +46,7 @@ class GameResource extends JsonResource
                 'matches' => $player_1->matches,
                 'wins' => $player_1->wins,
                 'losses' => $player_1->losses,
+                'is_winner' => $this->winner_id === $player_1->id ?? false,
             ],
             'player_2' => [
                 'id' => $player_2->id,
@@ -54,39 +56,21 @@ class GameResource extends JsonResource
                 'matches' => $player_2->matches,
                 'wins' => $player_2->wins,
                 'losses' => $player_2->losses,
+                'is_winner' => $this->winner_id === $player_2->id ?? false,
             ],
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
-
-            /*
-            * Score will shown like this
-            * Set 1 : 21-19
-            * Set 2 : 15-12
-            * Set 3 : 11-8
-            */
-            'scores' => $this->scores
-                ->groupBy('set')
-                ->map(function($setScores) {
-                    $player1Score = $setScores->where('player_id', $this->player_1_id)->first()?->score ?? 0;
-                    $player2Score = $setScores->where('player_id', $this->player_2_id)->first()?->score ?? 0;
-
-                    return [
-                        'set' => $setScores->first()->set,
-                        'player_1_score' => $player1Score,
-                        'player_2_score' => $player2Score,
-                    ];
-                })
-                ->values()
-                ->toArray(),
-            'winner' => $this->winner_id ? [
-                'id' => $this->winner->id,
-                'name' => $this->winner->name,
-                'avatar' => $this->winner->avatar ?? null,
-            ] : [
-                'id' => null,
-                'name' => null,
-                'avatar' => null,
-            ],
+            'scores' => $this->scores->map(function($score) {
+                return [
+                    'id' => $score->id,
+                    'set' => $score->set,
+                    'player_1_score' => $score->player_1_score,
+                    'player_2_score' => $score->player_2_score,
+                    'start_at' => $score->start_at,
+                    'match_duration' => $this->formatDuration($score->match_duration),
+                    'status' => $score->status,
+                ];
+            }),
             'umpire' => $this->umpire_id ? [
                 'id' => $this->umpire->id,
                 'name' => $this->umpire->name,
@@ -97,5 +81,29 @@ class GameResource extends JsonResource
                 'avatar' => null,
             ]
         ];
+    }
+
+    /**
+     * Format duration from seconds to HH:MM:SS
+     *
+     * @param int|null $seconds
+     * @return string|null
+     */
+    private function formatDuration(?int $seconds): ?string
+    {
+        if ($seconds === null) {
+            return null;
+        }
+
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $remainingSeconds = $seconds % 60;
+
+        return sprintf(
+            '%02d:%02d:%02d',
+            $hours,
+            $minutes,
+            $remainingSeconds
+        );
     }
 }
