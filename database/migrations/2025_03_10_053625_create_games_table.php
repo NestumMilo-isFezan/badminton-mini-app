@@ -46,9 +46,14 @@ return new class extends Migration
         Schema::create('game_scores', function (Blueprint $table) {
             $table->id();
             $table->integer('set');
+            $table->enum('status', ['not_started','started', 'completed'])->default('not_started');
+            $table->datetime('start_time')->nullable();
+            $table->integer('match_duration')->nullable();
             $table->foreignId('game_id')->constrained('games');
-            $table->foreignId('player_id')->constrained('players');
-            $table->integer('score');
+            $table->foreignId('player_id_1')->constrained('players');
+            $table->integer('player_1_score');
+            $table->foreignId('player_id_2')->constrained('players');
+            $table->integer('player_2_score');
             $table->timestamps();
         });
     }
