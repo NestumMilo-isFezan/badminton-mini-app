@@ -84,6 +84,58 @@ export interface Game {
     };
 }
 
+export interface GameScore {
+    id: number;
+    name: string;
+    category: string;
+    status: string;
+    start_time: string;
+    venue: {
+        id: number;
+        name: string;
+        image: string | null;
+        address: {
+            name: string;
+            city: string;
+            state: string;
+            zip: string;
+            country: string;
+        }
+    };
+    court: {
+        id: number;
+        name: string;
+    };
+    umpire: {
+        name: string;
+        avatar: string | null;
+    };
+    player_1: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        win_rate: number;
+        win: number;
+        losses: number;
+    };
+    player_2: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        win_rate: number;
+        win: number;
+        losses: number;
+    };
+    match_details: Array<{
+        set: number;
+        player_1_score: number;
+        player_2_score: number;
+        status: string;
+        start_at: string;
+        match_duration: number;
+    }>;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
