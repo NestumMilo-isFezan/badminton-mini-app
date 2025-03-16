@@ -12,13 +12,19 @@ class GameScore extends Model
 
     protected $fillable = [
         'game_id',
-        'player_id',
-        'score',
+        'player_1_id',
+        'player_2_id',
+        'player_1_score',
+        'player_2_score',
         'set',
+        'status',
+        'start_at',
+        'match_duration'
     ];
 
     protected $casts = [
-        'score' => 'integer'
+        'start_at' => 'datetime',
+        'match_duration' => 'integer'
     ];
 
     public function game(): BelongsTo

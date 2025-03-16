@@ -19,6 +19,9 @@ class ScoreResource extends JsonResource
             "set"=> $this->set,
             "player_1_score"=> $this->player_1_score,
             "player_2_score"=> $this->player_2_score,
+            "status"=> $this->status,
+            "start_at"=> $this->start_at,
+            "match_duration"=> $this->match_duration,
         ];
     }
 }
