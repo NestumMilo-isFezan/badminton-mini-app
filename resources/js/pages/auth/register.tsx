@@ -7,11 +7,28 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RadioCardGroup } from '@/components/ui/radio-card-group';
 import AuthLayout from '@/layouts/auth-layout';
+
+const roleOptions = [
+    {
+        value: 'player',
+        label: 'Player',
+        sublabel: 'Play matches',
+        description: 'Register as a player to play matches',
+    },
+    {
+        value: 'umpire',
+        label: 'Umpire',
+        sublabel: 'Officiate matches',
+        description: 'Register as an umpire to officiate matches',
+    },
+];
 
 type RegisterForm = {
     first_name: string;
     last_name: string;
+    roles: string;
     email: string;
     password: string;
     password_confirmation: string;
@@ -22,6 +39,7 @@ export default function Register() {
         first_name: '',
         last_name: '',
         email: '',
+        roles: 'player',
         password: '',
         password_confirmation: '',
     });
@@ -71,6 +89,19 @@ export default function Register() {
                             />
                             <InputError message={errors.last_name} className="mt-2" />
                         </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>I want to register as</Label>
+                        <RadioCardGroup
+                            options={roleOptions}
+                            value={data.roles}
+                            onValueChange={(value) => setData('roles', value)}
+                            disabled={processing}
+                            className="gap-2"
+                            orientation="horizontal"
+                        />
+                        <InputError message={errors.roles} />
                     </div>
 
                     <div className="grid gap-2">

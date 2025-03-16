@@ -178,9 +178,19 @@ export function GameCard({ game }: GameCardProps) {
                             )}
                         </div>
                     </div>
-                    <CardFooter className="flex justify-end gap-2 border-t p-4">
-                        <EditGameModal game={game} />
-                        <DeleteGameModal gameId={game.id} gameName={game.name} />
+                    <CardFooter className="flex justify-between gap-2 border-t p-4">
+                        <div>
+                            <Link href={route('admin.score.show', game.id)} onClick={(e) => e.stopPropagation()}>
+                                <Button variant="outline" size="sm">
+                                    <User className="h-4 w-4 mr-2" />
+                                    Match Score
+                                </Button>
+                            </Link>
+                        </div>
+                        <div className="flex gap-2">
+                            <EditGameModal game={game} />
+                            <DeleteGameModal gameId={game.id} gameName={game.name} />
+                        </div>
                     </CardFooter>
                 </Card>
             </PatternedShadow>
