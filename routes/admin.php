@@ -8,6 +8,9 @@ Route::middleware(['auth', 'user_access:admin'])->prefix('admin')->name('admin.'
         return Inertia::render('admin/dashboard');
     })->name('dashboard');
 
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::post('users/{user}/verify', [\App\Http\Controllers\Auth\VerifyUserController::class, 'verify'])->name('users.verify');
+
     Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class)->except(['create', 'edit']);
     Route::resource('games', \App\Http\Controllers\Admin\GameController::class);
 

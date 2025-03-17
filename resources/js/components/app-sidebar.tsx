@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Palette, Gamepad2, MapPin } from 'lucide-react';
+import { LayoutGrid, Palette, Gamepad2, MapPin, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -14,6 +14,12 @@ const mainNavItems: NavItem[] = [
         routeName: 'home',  // Named route
         icon: LayoutGrid,
         activeUrl: 'admin.dashboard|player.home|umpire.home' // Multiple routes pattern
+    },
+    {
+        title: 'Users',
+        url: '/users',
+        routeName: 'admin.users.index',
+        icon: Users,
     },
     {
         title: 'Venues',

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -30,7 +33,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $user = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'roles' => 'required|in:player,umpire',
@@ -38,14 +41,50 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'roles' => $request->roles,
-            'verified' => false,
-        ]);
+        DB::transaction(function () use ($user) {
+            $user = User::create([
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'email' => $user['email'],
+                'password' => Hash::make($user['password']),
+                'roles' => $user['roles'],
+                'verified' => false,
+            ]);
+
+            $address = Address::create([
+                'address_1' => "",
+                'address_2' => "",
+                'city' => "",
+                'state' => "",
+                'zip' => "",
+                'country' => "",
+            ]);
+
+            Profile::create([
+                'user_id' => $user->id,
+                'phone' => "",
+                'avatar' => "",
+                'gender' => "",
+                'address_id' => $address->id,
+            ]);
+
+            switch ($user['roles']) {
+                case 'player':
+                    $user->player()->create([
+                        'verified' => false,
+                        'wins' => 0,
+                        'losses' => 0,
+                        'matches' => 0,
+                        'win_rate' => 0,
+                    ]);
+                    break;
+                case 'umpire':
+                    $user->umpire()->create([
+                        'verified' => false,
+                    ]);
+                    break;
+            }
+        });
 
         event(new Registered($user));
 
